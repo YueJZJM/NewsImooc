@@ -10,14 +10,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static android.media.CamcorderProfile.get;
+
 public class NewsAdapter extends BaseAdapter {
 
     private List<NewsBean> mList;
     private LayoutInflater mInflater;
+    private ImageLoader mImageLoader;
 
     public NewsAdapter(Context context, List<NewsBean> data) {
         this.mList = data;
         mInflater = LayoutInflater.from(context);
+        mImageLoader = new ImageLoader();
     }
 
     @Override
@@ -50,6 +54,10 @@ public class NewsAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.ivIcon.setImageResource(R.mipmap.ic_launcher);
+        String url = mList.get(i).newsIconUrl;
+        viewHolder.ivIcon.setTag(url);
+        //new ImageLoader().showImageByThread(viewHolder.ivIcon,mList.get(i).newsIconUrl);
+        mImageLoader.showImageByAsyncTask(viewHolder.ivIcon,mList.get(i).newsIconUrl);
         viewHolder.tvTitle.setText(mList.get(i).newsTltle);
         viewHolder.tvContent.setText(mList.get(i).newsContent);
         return view;
